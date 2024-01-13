@@ -1,4 +1,6 @@
 package org.example.configuration;
+import org.example.entity.*;
+import org.example.entity.Package;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -10,7 +12,16 @@ public class SessionFactoryUtil {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
-//            configuration.addAnnotatedClass(Company.class);
+            configuration.addAnnotatedClass(TransportCompany.class);
+            configuration.addAnnotatedClass(Employee.class);
+            configuration.addAnnotatedClass(Vehicle.class);
+            configuration.addAnnotatedClass(VehicleType.class);
+            configuration.addAnnotatedClass(Transport.class);
+            configuration.addAnnotatedClass(Passengers.class);
+            configuration.addAnnotatedClass(Package.class);
+            configuration.addAnnotatedClass(Category.class);
+            configuration.addAnnotatedClass(Costumer.class);
+            configuration.addAnnotatedClass(CargoType.class);
             ServiceRegistry serviceRegistry
                     = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

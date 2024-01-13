@@ -5,14 +5,15 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "vehicle_type")
-public class VehicleType {
+@Table(name = "costumer")
+public class Costumer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String type;
+    private String name;
 
-    @OneToMany(mappedBy = "vehicleType")
-    private Set<Vehicle> vehicles;
+    @OneToMany(mappedBy = "costumer")
+    private Set<Transport> transports;
+
 }
