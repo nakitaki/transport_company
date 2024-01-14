@@ -30,7 +30,7 @@ public class CompanyDao {
     public static void saveCompanies(List<Company> companyList){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            companyList.stream().forEach((com)-> session.persist(com));
+            companyList.stream().forEach(session::persist);
             transaction.commit();
         }
     }
@@ -50,6 +50,14 @@ public class CompanyDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(company);
+            transaction.commit();
+        }
+    }
+
+    public static void deleteCompany(Company company){
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            session.remove(company);
             transaction.commit();
         }
     }
