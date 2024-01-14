@@ -2,6 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -18,9 +19,11 @@ public class Company {
 
     private LocalDate foundationDate;
 
+    private BigDecimal initialCapital;
+
 //    private BigDecimal overcharge;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private Set<Employee> employees;
 
     @OneToMany(mappedBy = "company")

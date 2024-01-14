@@ -17,7 +17,7 @@ public class Employee {
 
     private BigDecimal salary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 //    private Set<DrivingLicence> drivingLicense;
 
