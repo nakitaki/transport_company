@@ -21,5 +21,4 @@ public class CargoType {
     @ManyToMany(mappedBy = "cargoTypes")
     private Set<Transport> transports;
 
-
 }

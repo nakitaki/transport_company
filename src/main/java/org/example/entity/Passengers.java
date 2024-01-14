@@ -18,4 +18,16 @@ public class Passengers {
 
     @OneToMany(mappedBy = "passengers")
     private Set<CargoType> cargoTypes;
+
+    public Passengers() {
+    }
+
+    @Override
+    public String toString() {
+        return "Passengers{" +
+                "id=" + id +
+                ", count=" + count +
+                ", price_per_person=" + price_per_person +
+                '}';
+    }
 }

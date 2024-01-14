@@ -15,4 +15,15 @@ public class VehicleType {
 
     @OneToMany(mappedBy = "vehicleType")
     private Set<Vehicle> vehicles;
+
+    public VehicleType() {
+    }
+
+    @Override
+    public String toString() {
+        return "VehicleType{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

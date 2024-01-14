@@ -41,5 +41,23 @@ public class Transport {
     @ManyToMany
     private Set<CargoType> cargoTypes;
 
+    public Transport() {
+    }
 
+    @Override
+    public String toString() {
+        return "Transport{" +
+                "id=" + id +
+                ", starting_point='" + starting_point + '\'' +
+                ", end_point='" + end_point + '\'' +
+                ", departure_date=" + departure_date +
+                ", arrival_date=" + arrival_date +
+                ", isPaid=" + isPaid +
+                ", company=" + company +
+                ", vehicle=" + vehicle +
+                ", category=" + category +
+                ", costumer=" + costumer +
+                ", employee=" + employee +
+                '}';
+    }
 }

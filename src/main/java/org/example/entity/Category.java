@@ -20,4 +20,14 @@ public class Category {
     @ManyToMany
     private Set<Employee> employees;
 
+    public Category() {
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", license='" + license + '\'' +
+                '}';
+    }
 }

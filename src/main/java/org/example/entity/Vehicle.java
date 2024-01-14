@@ -29,5 +29,26 @@ public class Vehicle {
     @ManyToOne
     private VehicleType vehicleType;
 
+    public Vehicle() {
+    }
 
+    public Vehicle(String model, String licensePlate, int passenger_capacity, BigDecimal weight_capacity) {
+        this.model = model;
+        this.licensePlate = licensePlate;
+        this.passenger_capacity = passenger_capacity;
+        this.weight_capacity = weight_capacity;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", model='" + model + '\'' +
+                ", licensePlate='" + licensePlate + '\'' +
+                ", passenger_capacity=" + passenger_capacity +
+                ", weight_capacity=" + weight_capacity +
+                ", company=" + company +
+                ", vehicleType=" + vehicleType +
+                '}';
+    }
 }

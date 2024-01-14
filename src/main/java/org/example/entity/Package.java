@@ -19,6 +19,15 @@ public class Package {
     @OneToMany(mappedBy = "aPackage")
     private Set<CargoType> cargoTypes;
 
+    public Package() {
+    }
 
-
+    @Override
+    public String toString() {
+        return "Package{" +
+                "id=" + id +
+                ", weight_kg=" + weight_kg +
+                ", price_per_kg=" + price_per_kg +
+                '}';
+    }
 }

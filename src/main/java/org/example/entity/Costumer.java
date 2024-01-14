@@ -16,4 +16,14 @@ public class Costumer {
     @OneToMany(mappedBy = "costumer")
     private Set<Transport> transports;
 
+    public Costumer() {
+    }
+
+    @Override
+    public String toString() {
+        return "Costumer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
