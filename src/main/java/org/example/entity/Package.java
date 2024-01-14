@@ -22,6 +22,11 @@ public class Package {
     public Package() {
     }
 
+    public Package(BigDecimal weight_kg, BigDecimal price_per_kg) {
+        this.weight_kg = weight_kg;
+        this.price_per_kg = price_per_kg;
+    }
+
     @Override
     public String toString() {
         return "Package{" +

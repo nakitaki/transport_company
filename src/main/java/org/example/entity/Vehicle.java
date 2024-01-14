@@ -20,13 +20,13 @@ public class Vehicle {
 
     private BigDecimal weight_capacity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
     @OneToMany(mappedBy = "vehicle")
     private Set<Transport> transports;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private VehicleType vehicleType;
 
     public Vehicle() {

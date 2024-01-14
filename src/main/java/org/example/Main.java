@@ -3,8 +3,11 @@ package org.example;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.CompanyDao;
 import org.example.dao.EmployeeDao;
+import org.example.entity.CargoType;
 import org.example.entity.Company;
 import org.example.entity.Employee;
+import org.example.entity.Package;
+import org.example.exceptions.CompanyNotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -56,5 +59,15 @@ public class Main {
         CompanyDao.readCompanies().forEach(System.out::println);
         System.out.println("---------------------------------------------");
         CompanyDao.readCompanies1().forEach(System.out::println);
+
+//        CompanyDao.getCompanyEmployees(1).stream().forEach(System.out::println);
+
+        Employee employee12 = new Employee("Krischoy", BigDecimal.valueOf(3000));
+
+        Package packagge = new Package(BigDecimal.valueOf(2), BigDecimal.valueOf(4.55));
+        CargoType cargoType = new CargoType(packagge);
+        System.out.println(cargoType);
+
+
     }
 }

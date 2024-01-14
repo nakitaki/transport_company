@@ -65,6 +65,14 @@ public class Company {
         this.foundationDate = foundationDate;
     }
 
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
+    }
+
     @Override
     public String toString() {
         return "Company{" +

@@ -1,18 +1,17 @@
 package org.example.dao;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Company;
 import org.example.entity.Employee;
+import org.example.exceptions.CompanyNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 public class CompanyDao {
 
@@ -126,6 +125,31 @@ public class CompanyDao {
             return result;
         }
     }
+
+    //EMPLOYEES
+    public static Set<Employee> getCompanyEmployees(long companyId) {
+        Company company;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Company> query = builder.createQuery(Company.class);
+            Root<Company> root = query.from(Company.class);
+
+            root.fetch("employees", JoinType.INNER); // Eagerly fetch employees
+
+            query.select(root);
+            query.where(builder.equal(root.get("id"), companyId));
+
+            company = session.createQuery(query).getSingleResult();
+        }
+        return company.getEmployees();
+    }
+
+
+
+
+
+
+
 
 
 
