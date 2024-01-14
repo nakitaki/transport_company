@@ -1,7 +1,6 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.type.SerializableType;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class Transport {
     private boolean isPaid;
 
     @ManyToOne
-    private TransportCompany company;
+    private Company company;
 
     @ManyToOne
     private Vehicle vehicle;

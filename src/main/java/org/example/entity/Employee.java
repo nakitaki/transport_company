@@ -18,7 +18,7 @@ public class Employee {
     private BigDecimal salary;
 
     @ManyToOne
-    private TransportCompany company;
+    private Company company;
 //    private Set<DrivingLicence> drivingLicense;
 
     @OneToMany(mappedBy = "employee")

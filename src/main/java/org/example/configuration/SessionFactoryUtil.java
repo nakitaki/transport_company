@@ -12,7 +12,7 @@ public class SessionFactoryUtil {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
-            configuration.addAnnotatedClass(TransportCompany.class);
+            configuration.addAnnotatedClass(Company.class);
             configuration.addAnnotatedClass(Employee.class);
             configuration.addAnnotatedClass(Vehicle.class);
             configuration.addAnnotatedClass(VehicleType.class);

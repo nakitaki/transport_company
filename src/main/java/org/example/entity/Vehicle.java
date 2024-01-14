@@ -21,7 +21,7 @@ public class Vehicle {
     private BigDecimal weight_capacity;
 
     @ManyToOne
-    private TransportCompany company;
+    private Company company;
 
     @OneToMany(mappedBy = "vehicle")
     private Set<Transport> transports;
