@@ -2,11 +2,14 @@ package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.TransportDto;
+import org.example.entity.CargoType;
 import org.example.entity.Transport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TransportDao {
     public static void createTransport(Transport transport){
@@ -54,6 +57,14 @@ public class TransportDao {
         }
     }
 
+    public static void saveOrUpdateTransport(Transport transport) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(transport);
+            transaction.commit();
+        }
+    }
+
     public static void deleteTransport(Transport transport){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
@@ -85,6 +96,25 @@ public class TransportDao {
             transaction.commit();
         }
         return transportDtos;
+    }
+
+    public static void addCargoToTransport(CargoType cargo, Transport transport) {
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            if (transport == null) {
+                transport = new Transport();
+            }
+            if (transport.getCargoTypes() == null){
+                Set<CargoType> cargos = new HashSet<>();
+                transport.setCargoTypes(cargos);
+            }
+            transport.getCargoTypes().add(cargo);
+            // if the cargo is not in the database => add it; same for the driver
+            CargoTypeDao.saveOrUpdateCargoType(cargo);
+            TransportDao.saveOrUpdateTransport(transport);
+
+            transaction.commit();
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import org.example.dto.DriverDto;
 import org.example.dto.DriverDto;
 import org.example.entity.Category;
 import org.example.entity.Driver;
+import org.example.exceptions.DriverNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -90,11 +91,11 @@ public class DriverDao {
         return driverDtos;
     }
 
-    public static void addCategoryToDriver(Category category, Driver driver) {
+    public static void addCategoryToDriver(Category category, Driver driver) throws DriverNotFoundException {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             if(driver == null) {
-                driver = new Driver();
+                throw new DriverNotFoundException("Driver should noxt be null");
             }
             if(driver.getCategories() == null){
                 Set<Category> categories = new HashSet<>();

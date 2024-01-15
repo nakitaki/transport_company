@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
+import org.example.entity.Category;
 import org.example.entity.Package;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -57,6 +58,14 @@ public class PackageDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             session.remove(aPackage);
+            transaction.commit();
+        }
+    }
+
+    public static void saveOrUpdatePackage(Package aPackage) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(aPackage);
             transaction.commit();
         }
     }

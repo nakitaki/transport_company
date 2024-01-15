@@ -1,72 +1,71 @@
 package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
-import org.example.entity.Category;
+import org.example.entity.CargoType;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class CategoryDao {
-    public static void createCategory(Category category){
+public class CargoTypeDao {
+    public static void createCargoType(CargoType cargoType){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            session.persist(category);
+            session.persist(cargoType);
             transaction.commit();
         }
     }
 
-    public static Category getCategoryById(long id){
-        Category category;
+    public static CargoType getCargoTypeById(long id){
+        CargoType cargoType;
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            category = session.get(Category.class, id);
+            cargoType = session.get(CargoType.class, id);
             transaction.commit();
         }
-        return category;
+        return cargoType;
     }
 
-    public static void saveCategories(List<Category> categoryList){
+    public static void saveCargoTypes(List<CargoType> cargoTypeList){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            categoryList.stream().forEach(session::persist);
+            cargoTypeList.stream().forEach(session::persist);
             transaction.commit();
         }
     }
 
-    public static List<Category> readCategories(){
-        List<Category> categories;
+    public static List<CargoType> readCargoTypes(){
+        List<CargoType> cargoTypes;
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            categories =  session.createQuery("SELECT c FROM Category c", Category.class)
+            cargoTypes =  session.createQuery("SELECT c FROM CargoType c", CargoType.class)
                     .getResultList();
             transaction.commit();
         }
-        return categories;
+        return cargoTypes;
     }
 
-    public static void updateCategory(Category category){
+    public static void updateCargoType(CargoType cargoType){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            session.saveOrUpdate(category);
+            session.saveOrUpdate(cargoType);
             transaction.commit();
         }
     }
 
-    public static void deleteCategory(Category category){
+    public static void deleteCargoType(CargoType cargoType){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            session.remove(category);
+            session.remove(cargoType);
             transaction.commit();
         }
     }
 
-    public static void saveOrUpdateCategory(Category category) {
+    public static void saveOrUpdateCargoType(CargoType cargoType) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.merge(category);
+            session.merge(cargoType);
             transaction.commit();
         }
     }
-
 }
