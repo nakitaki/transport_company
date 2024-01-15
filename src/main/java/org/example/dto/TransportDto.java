@@ -20,17 +20,6 @@ public class TransportDto {
 
     private Driver driver;
 
-    public TransportDto() {
-    }
-
-    public TransportDto(long id, String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate) {
-        this.id = id;
-        this.startingPoint = startingPoint;
-        this.destination = destination;
-        this.departureDate = departureDate;
-        this.arrivalDate = arrivalDate;
-    }
-
     public TransportDto(long id, String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate, Vehicle vehicle, Driver driver) {
         this.id = id;
         this.startingPoint = startingPoint;
