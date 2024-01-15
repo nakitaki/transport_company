@@ -69,12 +69,44 @@ public class CargoType {
         this.passengers = passengers;
     }
 
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+    public Package getaPackage() {
+        return aPackage;
+    }
+
+    public void setaPackage(Package aPackage) {
+        this.aPackage = aPackage;
+    }
+
+    public Costumer getCostumer() {
+        return costumer;
+    }
+
+    public void setCostumer(Costumer costumer) {
+        this.costumer = costumer;
+    }
+
+    public Set<Transport> getTransports() {
+        return transports;
+    }
+
+    public void setTransports(Set<Transport> transports) {
+        this.transports = transports;
+    }
+
     @Override
     public String toString() {
         return "CargoType{" +
                 "id=" + id +
-//                ", aPackage=" + aPackage +
-//                ", passengers=" + passengers +
+//                ", aPackage=" + aPackage+
+//                ", passengers=" + passengers+
                 '}';
     }
 }

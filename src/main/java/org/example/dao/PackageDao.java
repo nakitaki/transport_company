@@ -4,6 +4,8 @@ import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Category;
 import org.example.entity.Package;
 import org.example.entity.Passengers;
+import org.example.exceptions.DriverNotFoundException;
+import org.example.exceptions.PackageNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -86,4 +88,6 @@ public class PackageDao {
         }
         return totalCost;
     }
+
+
 }

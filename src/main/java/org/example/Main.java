@@ -3,15 +3,10 @@ package org.example;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.*;
 import org.example.entity.*;
-import org.example.entity.Package;
 import org.example.exceptions.DriverNotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws DriverNotFoundException {
@@ -31,13 +26,13 @@ public class Main {
 //        DriverDao.saveOrUpdateDriver(driver12);
 
 ////////////////////////////////////////////////////////////////////
-//        Transport transport = new Transport("Etropole", "Sofia", LocalDate.of(2024,01,01), LocalDate.of(2024,01,05));
-//        Transport transport1 = new Transport("Etropole", "Sofia", LocalDate.of(2020,10,20), LocalDate.of(2020,10,21));
-//        Transport transport2 = new Transport("Sofia", "Etropole", LocalDate.of(2021,10,20), LocalDate.of(2021,10,21));
-//
-//        TransportDao.createTransport(transport);
-//        TransportDao.createTransport(transport1);
-//        TransportDao.createTransport(transport2);
+        Transport transport = new Transport("Etropole", "Sofia", LocalDate.of(2024,01,01), LocalDate.of(2024,01,05));
+        Transport transport1 = new Transport("Etropole", "Sofia", LocalDate.of(2020,10,20), LocalDate.of(2020,10,21));
+        Transport transport2 = new Transport("Sofia", "Etropole", LocalDate.of(2021,10,20), LocalDate.of(2021,10,21));
+
+        TransportDao.createTransport(transport);
+        TransportDao.createTransport(transport1);
+        TransportDao.createTransport(transport2);
 //
         Passengers passengers = new Passengers(10, BigDecimal.valueOf(3));
         Passengers passengers1 = new Passengers(30, BigDecimal.valueOf(3));
@@ -91,8 +86,8 @@ public class Main {
 //        Transport transport = new Transport("Etropole", "Sofia", LocalDate.of(2024,01,01), LocalDate.of(2024,01,05), company1, vehicle1, category, driver1);
 //        Transport transport1 = new Transport("Etropole", "Sofia", LocalDate.of(2020,10,20), LocalDate.of(2020,10,21), company1, vehicle1, category,driver1);
 //        Transport transport2 = new Transport("Sofia", "Etropole", LocalDate.of(2021,10,20), LocalDate.of(2021,10,21), company2,vehicle2,category,driver1);
-
-
+//
+//
 //        CompanyDao.createCompany(company1);
 //        CompanyDao.createCompany(company2);
 //        DriverDao.saveOrUpdateDriver(driver1);
@@ -124,17 +119,32 @@ public class Main {
 
         System.out.println(PassengersDao.calculateCostForPassengersById(1));
 
-        Package pack = new Package(BigDecimal.valueOf(10), BigDecimal.valueOf(0.3));
-        PackageDao.createPackage(pack);
+//        Package pack = new Package(BigDecimal.valueOf(10), BigDecimal.valueOf(0.3));
+//        PackageDao.createPackage(pack);
+
+//        CargoType cargoType = CargoTypeDao.getCargoTypeById(1);
+//        cargoType.setPaid(false);
+//        CargoTypeDao.saveOrUpdateCargoType(cargoType);
+
+        System.out.println(CostumerDao.getUnpaidCargosForClient(1));
+
 
 //        System.out.println(PackageDao.calculateCostForPackageById(3));
-        System.out.println(PassengersDao.calculateTotalCost());
-
+//        System.out.println(PassengersDao.calculateTotalCost());
+//        System.out.println(CargoTypeDao.totalCost(2));
+//        System.out.println(CargoTypeDao.costFromPackage(2));
+//        System.out.println(CargoTypeDao.costFromPassengers(2));
 //        Passengers passengers = new Passengers(10, BigDecimal.valueOf(3));
 //        System.out.println(passengers.getPricePerPerson());
 //        VehicleTypeDao.createVehicleType(vehicleType);
 //        VehicleDao.createVehicle(vehicle);
 //        TransportDao.createTransport(transport);
+
+
+//        TransportDao.cargosFromTransport(5).forEach(System.out::println);
+//        System.out.println(TransportDao.costFromTransport(5));
+
+//        CargoTypeDao.payCargo(CargoTypeDao.getCargoTypeById(1));
 
 
 //        TransportDao.getTransportsDTO().stream().forEach(System.out::println);

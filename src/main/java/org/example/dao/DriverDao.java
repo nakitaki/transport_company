@@ -95,7 +95,7 @@ public class DriverDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             if(driver == null) {
-                throw new DriverNotFoundException("Driver should noxt be null");
+                throw new DriverNotFoundException("Driver should not be null");
             }
             if(driver.getCategories() == null){
                 Set<Category> categories = new HashSet<>();

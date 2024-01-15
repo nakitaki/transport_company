@@ -1,7 +1,12 @@
 package org.example.dao;
 
+import jakarta.persistence.Query;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.CargoType;
+import org.example.entity.Costumer;
+import org.example.entity.Package;
+import org.example.entity.Passengers;
+import org.example.exceptions.PackageNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -70,6 +75,50 @@ public class CargoTypeDao {
         }
     }
 
+    public static BigDecimal totalCost(long id){
+        return costFromPackage(id).add(costFromPassengers(id));
+    }
 
+    public static BigDecimal costFromPackage(long id){
+        CargoType cargoType;
+        BigDecimal result = BigDecimal.ZERO;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+        Transaction transaction = session.beginTransaction();
+
+            cargoType = session.get(CargoType.class, id);
+            Package pack = cargoType.getAPackage();
+
+            if(pack!=null) {
+                result = PackageDao.calculateCostForPackageById(pack.getId());
+            }
+            transaction.commit();
+        }
+        return result;
+    }
+
+    public static BigDecimal costFromPassengers(long id){
+        CargoType cargoType;
+        BigDecimal result = BigDecimal.ZERO;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+
+            cargoType = session.get(CargoType.class, id);
+            Passengers pass = cargoType.getPassengers();
+
+            if(pass != null) {
+                result = PassengersDao.calculateCostForPassengersById(pass.getId());
+            }
+            transaction.commit();
+        }
+        return result;
+    }
+
+
+    public static void payCargo(CargoType cargo){
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            cargo.setPaid(true);
+            CargoTypeDao.saveOrUpdateCargoType(cargo);
+        }
+    }
 
 }

@@ -1,11 +1,16 @@
 package org.example.dao;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.TransportDto;
 import org.example.entity.CargoType;
 import org.example.entity.Transport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -118,25 +123,33 @@ public class TransportDao {
         }
     }
 
-//        public static BigDecimal calculateTotalCostForTransport(long transportId) {
-//            BigDecimal totalCost = BigDecimal.ZERO;
-//            try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-//                Transaction transaction = session.beginTransaction();
-//
-//                List<BigDecimal> packageCosts = session.createQuery(
-//                                "SELECT p.cost FROM CargoType p WHERE p.transport_id = :transportId",
-//                                BigDecimal.class)
-//                        .setParameter("transportId", transportId)
-//                        .getResultList();
-//
-//                for (BigDecimal cost : packageCosts) {
-//                    totalCost = totalCost.add(cost);
-//                }
-//
-//                transaction.commit();
-//            }
-//            return totalCost;
-//        }
+    public static List<CargoType> cargosFromTransport(long transportId) {
+        List<CargoType> cargoTypes;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<CargoType> cr = cb.createQuery(CargoType.class);
+            Root<CargoType> root = cr.from(CargoType.class);
+            Join<CargoType, Transport> join = root.join("transports");
+
+            cr.select(root).where(cb.equal(join.get("id"), transportId));
+
+            Query<CargoType> query = session.createQuery(cr);
+            cargoTypes = query.getResultList();
+
+        }
+        return cargoTypes;
+    }
+
+    public static BigDecimal costFromTransport(long transportId){
+        List<CargoType> cargoTypes = TransportDao.cargosFromTransport(transportId);
+        BigDecimal result = BigDecimal.ZERO;
+        for (CargoType cargo: cargoTypes) {
+            result = result.add(CargoTypeDao.totalCost(cargo.getId()));
+        }
+
+        return result;
+    }
+
 
 
 }
