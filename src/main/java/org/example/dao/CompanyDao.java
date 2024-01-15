@@ -3,8 +3,7 @@ package org.example.dao;
 import jakarta.persistence.criteria.*;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Company;
-import org.example.entity.Employee;
-import org.example.exceptions.CompanyNotFoundException;
+import org.example.entity.Driver;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -127,7 +126,7 @@ public class CompanyDao {
     }
 
     //EMPLOYEES
-    public static Set<Employee> getCompanyEmployees(long companyId) {
+    public static Set<Driver> getCompanyEmployees(long companyId) {
         Company company;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();

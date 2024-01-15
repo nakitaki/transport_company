@@ -1,16 +1,11 @@
-package org.example.entity;
+package org.example.dto;
 
-import jakarta.persistence.*;
+import org.example.entity.*;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Entity
-@Table(name = "transport")
-public class Transport {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TransportDto {
     private long id;
 
     private String startingPoint;
@@ -21,43 +16,30 @@ public class Transport {
 
     private LocalDate arrivalDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Company company;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     private Vehicle vehicle;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     private Driver driver;
 
-    @OneToMany(mappedBy = "transport")
-    private Set<CargoDetails> cargoDetails;
-
-    public Transport() {
+    public TransportDto() {
     }
 
-    public Transport(String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate) {
+    public TransportDto(long id, String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate) {
+        this.id = id;
         this.startingPoint = startingPoint;
         this.destination = destination;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
     }
 
-
-    public Transport(String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate, Company company, Vehicle vehicle, Category category, Driver driver) {
+    public TransportDto(long id, String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate, Vehicle vehicle, Driver driver) {
+        this.id = id;
         this.startingPoint = startingPoint;
         this.destination = destination;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
-        this.company = company;
         this.vehicle = vehicle;
-        this.category = category;
         this.driver = driver;
     }
-
 
     @Override
     public String toString() {
@@ -67,8 +49,8 @@ public class Transport {
                 ", end_point='" + destination + '\'' +
                 ", departure_date=" + departureDate +
                 ", arrival_date=" + arrivalDate +
+                ", vehicle=" + vehicle.getModel() +
+                ", driver=" + driver.getName() +
                 '}';
     }
 }
-
-//TODO Set<CargoType>?????

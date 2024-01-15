@@ -18,9 +18,45 @@ public class Category {
     private Set<Transport> transports;
 
     @ManyToMany
-    private Set<Employee> employees;
+    private Set<Driver> drivers;
 
     public Category() {
+    }
+
+    public Category(String license) {
+        this.license = license;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public Set<Transport> getTransports() {
+        return transports;
+    }
+
+    public void setTransports(Set<Transport> transports) {
+        this.transports = transports;
+    }
+
+    public Set<Driver> getEmployees() {
+        return drivers;
+    }
+
+    public void setEmployees(Set<Driver> drivers) {
+        this.drivers = drivers;
     }
 
     @Override

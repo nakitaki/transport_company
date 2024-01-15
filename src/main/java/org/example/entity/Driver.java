@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
-@Table(name = "employee")
-public class Employee {
+@Table(name = "driver")
+public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,25 +21,26 @@ public class Employee {
     private Company company;
 //    private Set<DrivingLicence> drivingLicense;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "driver")
     private Set<Transport> transports;
 
-    @ManyToMany(mappedBy = "employees")
+    @ManyToMany(mappedBy = "drivers")
     private Set<Category> categories;
 
-    public Employee() {
+    public Driver() {
     }
 
-    public Employee(String name, BigDecimal salary) {
+    public Driver(String name, BigDecimal salary) {
         this.name = name;
         this.salary = salary;
     }
 
-    public Employee(String name, BigDecimal salary, Company company) {
+    public Driver(String name, BigDecimal salary, Company company) {
         this.name = name;
         this.salary = salary;
         this.company = company;
     }
+
 
     public long getId() {
         return id;
@@ -57,13 +58,44 @@ public class Employee {
         this.company = company;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public Set<Transport> getTransports() {
+        return transports;
+    }
+
+    public void setTransports(Set<Transport> transports) {
+        this.transports = transports;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Driver{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", salary=" + salary +
-                ", company=" + company +
                 '}';
     }
 }

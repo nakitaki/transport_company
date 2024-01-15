@@ -24,14 +24,13 @@ public class Company {
 //    private BigDecimal overcharge;
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private Set<Employee> employees;
+    private Set<Driver> drivers;
 
     @OneToMany(mappedBy = "company")
     private Set<Vehicle> vehicles;
 
     @OneToMany(mappedBy = "company")
     private Set<Transport> transports;
-
 
     public Company() {
     }
@@ -40,6 +39,8 @@ public class Company {
         this.name = name;
         this.foundationDate = foundationDate;
     }
+
+
 
     public long getId() {
         return id;
@@ -65,12 +66,36 @@ public class Company {
         this.foundationDate = foundationDate;
     }
 
-    public Set<Employee> getEmployees() {
-        return employees;
+    public Set<Driver> getEmployees() {
+        return drivers;
     }
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
+    public void setEmployees(Set<Driver> drivers) {
+        this.drivers = drivers;
+    }
+
+    public BigDecimal getInitialCapital() {
+        return initialCapital;
+    }
+
+    public void setInitialCapital(BigDecimal initialCapital) {
+        this.initialCapital = initialCapital;
+    }
+
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
+    public Set<Transport> getTransports() {
+        return transports;
+    }
+
+    public void setTransports(Set<Transport> transports) {
+        this.transports = transports;
     }
 
     @Override
@@ -82,3 +107,5 @@ public class Company {
                 '}';
     }
 }
+
+//TODO remove initial capital

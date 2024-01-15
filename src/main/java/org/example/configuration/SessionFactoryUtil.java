@@ -13,7 +13,7 @@ public class SessionFactoryUtil {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(Company.class);
-            configuration.addAnnotatedClass(Employee.class);
+            configuration.addAnnotatedClass(Driver.class);
             configuration.addAnnotatedClass(Vehicle.class);
             configuration.addAnnotatedClass(VehicleType.class);
             configuration.addAnnotatedClass(Transport.class);
@@ -22,6 +22,7 @@ public class SessionFactoryUtil {
             configuration.addAnnotatedClass(Category.class);
             configuration.addAnnotatedClass(Costumer.class);
             configuration.addAnnotatedClass(CargoType.class);
+            configuration.addAnnotatedClass(CargoDetails.class);
             ServiceRegistry serviceRegistry
                     = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
