@@ -1,11 +1,14 @@
 package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
+import org.example.entity.Category;
 import org.example.entity.Driver;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DriverDao {
     public static void createDriver(Driver driver){
@@ -57,6 +60,37 @@ public class DriverDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             session.remove(driver);
+            transaction.commit();
+        }
+    }
+
+    public static void saveOrUpdateDriver(Driver driver){
+        if(driver == null){
+            throw new IllegalArgumentException("The driver cannot be null");
+        }
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            session.merge(driver);
+            transaction.commit();
+        }
+    }
+
+    public static void addCategoryToDriver(Category category, Driver driver) {
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            if(driver == null) {
+                driver = new Driver();
+            }
+            if(driver.getCategories() == null){
+                Set<Category> categories = new HashSet<>();
+                driver.setCategories(categories);
+
+            }
+            driver.getCategories().add(category);
+            // if the qualification is not in the database => add it; same for the driver
+            CategoryDao.saveOrUpdateCategory(category);
+            DriverDao.saveOrUpdateDriver(driver);
+
             transaction.commit();
         }
     }

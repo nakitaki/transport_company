@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "package")
-public class Package {
+public class Package{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

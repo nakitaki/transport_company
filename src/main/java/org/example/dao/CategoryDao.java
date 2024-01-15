@@ -61,4 +61,13 @@ public class CategoryDao {
         }
     }
 
+    public static void saveOrUpdateCategory(Category category) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            // it used to be saveOrUpdate(), but it's deprecated
+            session.merge(category);
+            transaction.commit();
+        }
+    }
+
 }

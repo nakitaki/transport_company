@@ -17,7 +17,7 @@ public class Costumer {
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "costumer")
-    private Set<CargoDetails> cargoDetails;
+    private Set<CargoType> cargoTypes;
 
     public Costumer() {
     }
@@ -46,14 +46,6 @@ public class Costumer {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<CargoDetails> getCargoDetails() {
-        return cargoDetails;
-    }
-
-    public void setCargoDetails(Set<CargoDetails> cargoDetails) {
-        this.cargoDetails = cargoDetails;
     }
 
     @Override

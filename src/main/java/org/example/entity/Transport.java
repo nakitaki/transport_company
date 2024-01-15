@@ -33,8 +33,8 @@ public class Transport {
     @ManyToOne(fetch = FetchType.LAZY)
     private Driver driver;
 
-    @OneToMany(mappedBy = "transport")
-    private Set<CargoDetails> cargoDetails;
+    @ManyToMany(mappedBy = "transports")
+    private Set<CargoType> cargoTypes;
 
     public Transport() {
     }

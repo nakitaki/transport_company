@@ -13,19 +13,21 @@ public class CargoType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private boolean isPaid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Package aPackage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Passengers passengers;
 
-//    @ManyToMany(mappedBy = "cargoTypes")
-//    private Set<Transport> transports;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Costumer costumer;
+
+    @ManyToMany
+    private Set<Transport> transports;
 
 
-    @OneToOne//(unique = true) //TODO
-//    @UniqueElements
-    private CargoDetails cargoDetails;
 
     public CargoType() {
     }

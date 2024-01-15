@@ -17,7 +17,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private Set<Transport> transports;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories")
     private Set<Driver> drivers;
 
     public Category() {
