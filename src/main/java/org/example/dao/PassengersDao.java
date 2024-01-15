@@ -5,6 +5,7 @@ import org.example.entity.Passengers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PassengersDao {
@@ -59,6 +60,41 @@ public class PassengersDao {
             session.remove(passengers);
             transaction.commit();
         }
+    }
+
+
+
+    public static BigDecimal calculateTotalCost() {
+        BigDecimal totalCost = BigDecimal.ZERO;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Long totalPeople = (Long) session.createQuery("SELECT SUM(p.count) FROM Passengers p").uniqueResult();
+            BigDecimal costPerPerson = (BigDecimal) session.createQuery("SELECT p.pricePerPerson FROM Passengers p").setMaxResults(1).uniqueResult();
+
+            if (totalPeople != null && costPerPerson != null) {
+                totalCost = costPerPerson.multiply(BigDecimal.valueOf(totalPeople));
+            }
+
+            transaction.commit();
+
+        }
+        return totalCost;
+    }
+
+    public static BigDecimal calculateCostForPassengersById(long passengerId) {
+        BigDecimal totalCost = BigDecimal.ZERO;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Passengers passenger = session.get(Passengers.class, passengerId);
+            if (passenger != null) {
+                totalCost = passenger.getPricePerPerson().multiply(BigDecimal.valueOf(passenger.getCount()));
+            }
+
+            transaction.commit();
+        }
+        return totalCost;
     }
 
 }

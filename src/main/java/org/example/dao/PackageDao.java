@@ -3,9 +3,11 @@ package org.example.dao;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Category;
 import org.example.entity.Package;
+import org.example.entity.Passengers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PackageDao {
@@ -70,4 +72,18 @@ public class PackageDao {
         }
     }
 
+    public static BigDecimal calculateCostForPackageById(long packageId) {
+        BigDecimal totalCost = BigDecimal.ZERO;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Package aPackage = session.get(Package.class, packageId);
+            if (aPackage != null) {
+                totalCost = aPackage.getPrice_per_kg().multiply(aPackage.getWeight_kg());
+            }
+
+            transaction.commit();
+        }
+        return totalCost;
+    }
 }

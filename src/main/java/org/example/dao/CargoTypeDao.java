@@ -5,6 +5,7 @@ import org.example.entity.CargoType;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class CargoTypeDao {
@@ -68,4 +69,7 @@ public class CargoTypeDao {
             transaction.commit();
         }
     }
+
+
+
 }

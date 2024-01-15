@@ -7,6 +7,7 @@ import org.example.entity.Transport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class TransportDao {
         List<Transport> transports;
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
-            transports =  session.createQuery("SELECT c FROM Transport c", Transport.class)
+            transports =  session.createQuery("SELECT t FROM Transport t", Transport.class)
                     .getResultList();
             transaction.commit();
         }
@@ -77,7 +78,7 @@ public class TransportDao {
         List<Transport> transports;
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            transports = session.createQuery("Select i From Transport i", Transport.class)
+            transports = session.createQuery("Select t From Transport t", Transport.class)
                     .getResultList();
             transaction.commit();
         }
@@ -89,9 +90,9 @@ public class TransportDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             transportDtos = session
-                    .createQuery("select new org.example.dto.TransportDto(i.id, i.startingPoint, i.destination," +
-                            " i.departureDate, i.arrivalDate, i.vehicle, i.driver) " +
-                            "from Transport i", TransportDto.class)
+                    .createQuery("select new org.example.dto.TransportDto(t.id, t.startingPoint, t.destination," +
+                            " t.departureDate, t.arrivalDate, t.vehicle, t.driver) " +
+                            "from Transport t", TransportDto.class)
                     .getResultList();
             transaction.commit();
         }
@@ -116,5 +117,26 @@ public class TransportDao {
             transaction.commit();
         }
     }
+
+//        public static BigDecimal calculateTotalCostForTransport(long transportId) {
+//            BigDecimal totalCost = BigDecimal.ZERO;
+//            try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+//                Transaction transaction = session.beginTransaction();
+//
+//                List<BigDecimal> packageCosts = session.createQuery(
+//                                "SELECT p.cost FROM CargoType p WHERE p.transport_id = :transportId",
+//                                BigDecimal.class)
+//                        .setParameter("transportId", transportId)
+//                        .getResultList();
+//
+//                for (BigDecimal cost : packageCosts) {
+//                    totalCost = totalCost.add(cost);
+//                }
+//
+//                transaction.commit();
+//            }
+//            return totalCost;
+//        }
+
 
 }

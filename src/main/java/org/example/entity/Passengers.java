@@ -14,7 +14,7 @@ public class Passengers {
 
     private int count;
 
-    private BigDecimal price_per_person;
+    private BigDecimal pricePerPerson;
 
     @OneToMany(mappedBy = "passengers")
     private Set<CargoType> cargoTypes;
@@ -22,9 +22,9 @@ public class Passengers {
     public Passengers() {
     }
 
-    public Passengers(int count, BigDecimal price_per_person) {
+    public Passengers(int count, BigDecimal pricePerPerson) {
         this.count = count;
-        this.price_per_person = price_per_person;
+        this.pricePerPerson = pricePerPerson;
     }
 
     public long getId() {
@@ -43,12 +43,12 @@ public class Passengers {
         this.count = count;
     }
 
-    public BigDecimal getPrice_per_person() {
-        return price_per_person;
+    public BigDecimal getPricePerPerson() {
+        return pricePerPerson;
     }
 
-    public void setPrice_per_person(BigDecimal price_per_person) {
-        this.price_per_person = price_per_person;
+    public void setPricePerPerson(BigDecimal price_per_person) {
+        this.pricePerPerson = price_per_person;
     }
 
     public Set<CargoType> getCargoTypes() {
