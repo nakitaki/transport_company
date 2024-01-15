@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
+import org.example.dto.VehicleDto;
 import org.example.entity.Vehicle;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -60,6 +61,19 @@ public class VehicleDao {
             session.remove(vehicle);
             transaction.commit();
         }
+    }
+
+    public static List<VehicleDto> getVehiclesDTO() {
+        List<VehicleDto> vehicleDtos;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            vehicleDtos = session
+                    .createQuery("select new org.example.dto.VehicleDto(i.id, i.model, i.licensePlate, i.vehicleType) " +
+                            "from Vehicle i", VehicleDto.class)
+                    .getResultList();
+            transaction.commit();
+        }
+        return vehicleDtos;
     }
 
 }

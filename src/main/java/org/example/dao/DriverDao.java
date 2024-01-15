@@ -1,6 +1,8 @@
 package org.example.dao;
 
 import org.example.configuration.SessionFactoryUtil;
+import org.example.dto.DriverDto;
+import org.example.dto.DriverDto;
 import org.example.entity.Category;
 import org.example.entity.Driver;
 import org.hibernate.Session;
@@ -75,6 +77,19 @@ public class DriverDao {
         }
     }
 
+    public static List<DriverDto> getDriversDTO() {
+        List<DriverDto> driverDtos;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            driverDtos = session
+                    .createQuery("select new org.example.dto.DriverDto(i.id, i.name, i.salary, i.company) " +
+                            "from Driver i", DriverDto.class)
+                    .getResultList();
+            transaction.commit();
+        }
+        return driverDtos;
+    }
+
     public static void addCategoryToDriver(Category category, Driver driver) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -94,6 +109,8 @@ public class DriverDao {
             transaction.commit();
         }
     }
+
+
 
 
 }

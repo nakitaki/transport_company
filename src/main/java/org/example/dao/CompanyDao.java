@@ -2,6 +2,9 @@ package org.example.dao;
 
 import jakarta.persistence.criteria.*;
 import org.example.configuration.SessionFactoryUtil;
+import org.example.dto.CompanyDto;
+import org.example.dto.DriverDto;
+import org.example.dto.TransportDto;
 import org.example.entity.Company;
 import org.example.entity.Driver;
 import org.hibernate.Session;
@@ -62,6 +65,19 @@ public class CompanyDao {
             Query<Company> query = session.createQuery(cr);
             return query.getResultList();
         }
+    }
+
+    public static List<CompanyDto> getCompaniesDTO() {
+        List<CompanyDto> companiesDtos;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            companiesDtos = session
+                    .createQuery("select new org.example.dto.CompanyDto(i.id, i.name) " +
+                            "from Company i", CompanyDto.class)
+                    .getResultList();
+            transaction.commit();
+        }
+        return companiesDtos;
     }
 
     public static void updateCompany(Company company){
@@ -126,7 +142,7 @@ public class CompanyDao {
     }
 
     //EMPLOYEES
-    public static Set<Driver> getCompanyEmployees(long companyId) {
+    public static Set<Driver> getCompanyDrivers(long companyId) {
         Company company;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -142,6 +158,23 @@ public class CompanyDao {
         }
         return company.getEmployees();
     }
+
+    public static List<DriverDto> getCompanyDriversDTO(long company_id) {
+        List<DriverDto> employees;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            employees = session.createQuery(
+                            "select new org.example.dto.DriverDto(e.id, e.name, e.salary, e.company) from Driver e" +
+                                    " join e.company c" +
+                                    " where c.id = :id",
+                            DriverDto.class)
+                    .setParameter("id", company_id)
+                    .getResultList();
+            transaction.commit();
+        }
+        return employees;
+    }
+
 
 
 
