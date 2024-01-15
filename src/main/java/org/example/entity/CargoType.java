@@ -24,7 +24,7 @@ public class CargoType {
     @ManyToOne(fetch = FetchType.LAZY)
     private Costumer costumer;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "cargoTypes")
     private Set<Transport> transports;
 
 
@@ -73,8 +73,8 @@ public class CargoType {
     public String toString() {
         return "CargoType{" +
                 "id=" + id +
-                ", aPackage=" + aPackage +
-                ", passengers=" + passengers +
+//                ", aPackage=" + aPackage +
+//                ", passengers=" + passengers +
                 '}';
     }
 }

@@ -19,7 +19,6 @@ public class Driver {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
-//    private Set<DrivingLicence> drivingLicense;
 
     @OneToMany(mappedBy = "driver")
     private Set<Transport> transports;

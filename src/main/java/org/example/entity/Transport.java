@@ -33,7 +33,7 @@ public class Transport {
     @ManyToOne(fetch = FetchType.LAZY)
     private Driver driver;
 
-    @ManyToMany(mappedBy = "transports")
+    @ManyToMany
     private Set<CargoType> cargoTypes;
 
     public Transport() {
@@ -58,6 +58,85 @@ public class Transport {
         this.driver = driver;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getStartingPoint() {
+        return startingPoint;
+    }
+
+    public void setStartingPoint(String startingPoint) {
+        this.startingPoint = startingPoint;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public LocalDate getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public Set<CargoType> getCargoTypes() {
+        return cargoTypes;
+    }
+
+    public void setCargoTypes(Set<CargoType> cargoTypes) {
+        this.cargoTypes = cargoTypes;
+    }
 
     @Override
     public String toString() {
@@ -71,4 +150,3 @@ public class Transport {
     }
 }
 
-//TODO Set<CargoType>?????

@@ -14,8 +14,6 @@ public class Costumer {
 
     private String name;
 
-    private BigDecimal balance;
-
     @OneToMany(mappedBy = "costumer")
     private Set<CargoType> cargoTypes;
 
@@ -24,12 +22,6 @@ public class Costumer {
 
     public Costumer(String name) {
         this.name = name;
-        this.balance = BigDecimal.ZERO;
-    }
-
-    public Costumer(String name, BigDecimal balance) {
-        this.name = name;
-        this.balance = balance;
     }
 
     public long getId() {
@@ -53,7 +45,6 @@ public class Costumer {
         return "Costumer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", balance=" + balance +
                 '}';
     }
 }

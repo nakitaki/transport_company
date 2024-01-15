@@ -20,6 +20,13 @@ public class DriverDto {
 
     private Company company;
 
+    public DriverDto(long id, String name, BigDecimal salary, Company company) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.company = company;
+    }
+
     public long getId() {
         return id;
     }
