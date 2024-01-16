@@ -56,6 +56,14 @@ public class Transport {
         this.arrivalDate = arrivalDate;
     }
 
+    public Transport(String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate, Vehicle vehicle, Category category) {
+        this.startingPoint = startingPoint;
+        this.destination = destination;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
+        this.vehicle = vehicle;
+        this.category = category;
+    }
 
     public Transport(String startingPoint, String destination, LocalDate departureDate, LocalDate arrivalDate, Company company, Vehicle vehicle, Category category, Driver driver) {
         this.startingPoint = startingPoint;

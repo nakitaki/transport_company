@@ -1,0 +1,2 @@
+ransport{id=2, starting_point='Etropole', end_point='Sofia', departure_date=2020-10-20, arrival_date=2020-10-21}
+Transport{id=3, starting_point='Sofia', end_point='Etropole', departure_date=2021-10-20, arrival_date=2021-10-21}

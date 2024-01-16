@@ -7,10 +7,9 @@ import jakarta.persistence.criteria.Root;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.CompanyDto;
 import org.example.dto.TransportDto;
-import org.example.entity.CargoType;
-import org.example.entity.Company;
-import org.example.entity.Driver;
-import org.example.entity.Transport;
+import org.example.entity.*;
+import org.example.exceptions.DriverDoesNotHaveCategory;
+import org.example.exceptions.VehicleNotFound;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -165,6 +164,34 @@ public class TransportDao {
             transaction.commit();
         }
         return transportDtos;
+    }
+
+    public static boolean setDriverQualifiedForTransport(Driver driver, Transport transport) throws VehicleNotFound, DriverDoesNotHaveCategory {
+        if (transport.getVehicle() == null) {
+            throw new VehicleNotFound("The transport does not have vehicle.");
+        }
+
+        Set<Category> categories = driver.getCategories();
+        boolean hasCategory = false;
+//        int i = 0;
+        for(Category category : categories) {
+
+            if(category.getId() == transport.getCategory().getId()) {
+                hasCategory = true;
+                break;
+            }
+        }
+
+        if (!hasCategory) {
+            throw new DriverDoesNotHaveCategory("The driver does not have the required category. Reqiured category:"
+                    + transport.getCategory());
+        }
+        else{
+            transport.setDriver(driver);
+            DriverDao.saveOrUpdateDriver(driver);
+            TransportDao.saveOrUpdateTransport(transport);
+        }
+        return hasCategory;
     }
 
 

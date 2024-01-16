@@ -169,7 +169,7 @@ public class CompanyDao {
             CriteriaQuery<Company> query = builder.createQuery(Company.class);
             Root<Company> root = query.from(Company.class);
 
-            root.fetch("employees", JoinType.INNER); // Eagerly fetch employees
+            root.fetch("drivers", JoinType.INNER); // Eagerly fetch employees
 
             query.select(root);
             query.where(builder.equal(root.get("id"), companyId));

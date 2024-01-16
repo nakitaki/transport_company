@@ -2,11 +2,17 @@ package org.example;
 
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.*;
+import org.example.dto.TransportDto;
 import org.example.entity.*;
+import org.example.exceptions.DriverDoesNotHaveCategory;
 import org.example.exceptions.DriverNotFoundException;
+import org.example.exceptions.VehicleNotFound;
+import org.example.file.TransportDetails;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws DriverNotFoundException {
@@ -21,7 +27,7 @@ public class Main {
         CategoryDao.saveOrUpdateCategory(category1);
         CategoryDao.saveOrUpdateCategory(category2);
         VehicleType vehicleType = new VehicleType("car");
-        Vehicle vehicle1 = new Vehicle("Audi a5", "CA1558AX", 4, BigDecimal.valueOf(30), company1, vehicleType);
+        Vehicle vehicle1 = new Vehicle("Audi a5", "CA15588AX", 4, BigDecimal.valueOf(30), company1, vehicleType);
         Driver driver1 = new Driver("Krischo", BigDecimal.valueOf(3000), company1);
         Driver driver2 = new Driver("Ivcho", BigDecimal.valueOf(2000),company1);
         driver1.setId(1);
@@ -36,10 +42,23 @@ public class Main {
         DriverDao.saveOrUpdateDriver(driver1);
         DriverDao.saveOrUpdateDriver(driver2);
 
+        Transport transport = new Transport("Etropole", "zSofia", LocalDate.of(2024,01,01), LocalDate.of(2024,01,05), company1,vehicle1, category1, driver1);
+        Transport transport1 = new Transport("Etropole", "Sofia", LocalDate.of(2020,10,20), LocalDate.of(2020,10,21), company1,vehicle1, category1, driver1);
+        Transport transport2 = new Transport("Sofia", "Etropole", LocalDate.of(2021,10,20), LocalDate.of(2021,10,21), vehicle1, category1);
+        TransportDao.createTransport(transport);
+        TransportDao.createTransport(transport1);
+        TransportDao.createTransport(transport2);
 
-
+//
         DriverDao.DriverCategories(driver1.getId()).forEach(System.out::println);
-        DriverDao.DriverCategories(driver2.getId()).forEach(System.out::println);
+
+
+
+
+
+
+//
+
 
 //        System.out.println(DriverDao.countDriverCategories(driver1.getId()));
 //        System.out.println(DriverDao.countDriverCategories(driver2.getId()));
@@ -55,24 +74,39 @@ public class Main {
 //        });
 
 ////////////////////////////////////////////////////////////////////
-        Transport transport = new Transport("Etropole", "zSofia", LocalDate.of(2024,01,01), LocalDate.of(2024,01,05), company1,vehicle1, category1, driver1);
-        Transport transport1 = new Transport("Etropole", "Sofia", LocalDate.of(2020,10,20), LocalDate.of(2020,10,21), company1,vehicle1, category1, driver1);
-        Transport transport2 = new Transport("Sofia", "Etropole", LocalDate.of(2021,10,20), LocalDate.of(2021,10,21), company1,vehicle1, category1, driver1);
+
+        System.out.println("/////////////////////////////////////////////////////");
+        DriverDao.DriverCategories(driver1.getId()).forEach(System.out::println);
+        System.out.println("/////////////////////////////////////////////////////");
+
+        try {
+            System.out.println(TransportDao.setDriverQualifiedForTransport(driver1, transport2));
+        } catch (VehicleNotFound e) {
+            throw new RuntimeException(e);
+        } catch (DriverDoesNotHaveCategory e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Transport> transports = new ArrayList<>();
+        transports.add(transport1);
+        transports.add(transport2);
+
+        List<TransportDto> transports1 = new ArrayList<>();
+        transports1 = TransportDao.getTransportsDTO();
+        String filename = "output.txt";
+        TransportDetails.writeCompanyDetails(filename, company1);
+        System.out.println(TransportDetails.readFromFile(filename));
 
 
-//
-        TransportDao.createTransport(transport);
-        TransportDao.createTransport(transport1);
-        TransportDao.createTransport(transport2);
-
-        System.out.println("here1");
+//        if(TransportDao.isDriverQualifiedForTransport(driver1, transport))
 //        TransportDao.orderByDestinationDto().forEach(System.out::println);
-        TransportDao.getTransportsDTO().forEach(System.out::println);
-        System.out.println("here2");
-        TransportDao.orderByDestination().forEach(System.out::println);
+//        TransportDao.getTransportsDTO().forEach(System.out::println);
+//        System.out.println("here2");
+//        TransportDao.orderByDestination().forEach(System.out::println);
 
 
 
+//        CompanyDao.getCompanyDrivers(company1.getId()).forEach(System.out::println);
 //
 //        CompanyDao.getCompaniesDTO().forEach(System.out::println);
 ////
