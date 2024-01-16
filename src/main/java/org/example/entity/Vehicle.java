@@ -1,6 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -12,13 +14,20 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Company name cannot be blank!")
+    @Pattern(regexp = "^[A-Z].*", message = "Vehicle model should start with a capital letter!")
+    @Column(name="model", nullable = false)
     private String model;
 
+    @Column(name="license_plate", nullable = false)
+    @Pattern(regexp = "^[A-Z0-9]+$", message = "The value should contain only uppercase letters and numbers.")
     private String licensePlate;
 
-    private int passenger_capacity;
+    @Column(name="passenger_capacity")
+    private int passengerCapacity;
 
-    private BigDecimal weight_capacity;
+    @Column(name="weight_capacity")
+    private BigDecimal weightCapacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
@@ -32,26 +41,26 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(String model, String licensePlate, int passenger_capacity, BigDecimal weight_capacity) {
+    public Vehicle(String model, String licensePlate, int passengerCapacity, BigDecimal weightCapacity) {
         this.model = model;
         this.licensePlate = licensePlate;
-        this.passenger_capacity = passenger_capacity;
-        this.weight_capacity = weight_capacity;
+        this.passengerCapacity = passengerCapacity;
+        this.weightCapacity = weightCapacity;
     }
 
-    public Vehicle(String model, String licensePlate, int passenger_capacity, BigDecimal weight_capacity, VehicleType vehicleType) {
+    public Vehicle(String model, String licensePlate, int passengerCapacity, BigDecimal weightCapacity, VehicleType vehicleType) {
         this.model = model;
         this.licensePlate = licensePlate;
-        this.passenger_capacity = passenger_capacity;
-        this.weight_capacity = weight_capacity;
+        this.passengerCapacity = passengerCapacity;
+        this.weightCapacity = weightCapacity;
         this.vehicleType = vehicleType;
     }
 
-    public Vehicle(String model, String licensePlate, int passenger_capacity, BigDecimal weight_capacity, Company company, VehicleType vehicleType) {
+    public Vehicle(String model, String licensePlate, int passengerCapacity, BigDecimal weightCapacity, Company company, VehicleType vehicleType) {
         this.model = model;
         this.licensePlate = licensePlate;
-        this.passenger_capacity = passenger_capacity;
-        this.weight_capacity = weight_capacity;
+        this.passengerCapacity = passengerCapacity;
+        this.weightCapacity = weightCapacity;
         this.company = company;
         this.vehicleType = vehicleType;
     }
@@ -80,20 +89,20 @@ public class Vehicle {
         this.licensePlate = licensePlate;
     }
 
-    public int getPassenger_capacity() {
-        return passenger_capacity;
+    public int getPassengerCapacity() {
+        return passengerCapacity;
     }
 
-    public void setPassenger_capacity(int passenger_capacity) {
-        this.passenger_capacity = passenger_capacity;
+    public void setPassengerCapacity(int passenger_capacity) {
+        this.passengerCapacity = passenger_capacity;
     }
 
-    public BigDecimal getWeight_capacity() {
-        return weight_capacity;
+    public BigDecimal getWeightCapacity() {
+        return weightCapacity;
     }
 
-    public void setWeight_capacity(BigDecimal weight_capacity) {
-        this.weight_capacity = weight_capacity;
+    public void setWeightCapacity(BigDecimal weight_capacity) {
+        this.weightCapacity = weight_capacity;
     }
 
     public Company getCompany() {

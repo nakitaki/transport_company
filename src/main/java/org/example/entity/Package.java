@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -9,12 +10,17 @@ import java.util.Set;
 @Table(name = "package")
 public class Package{
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private BigDecimal weight_kg;
+    @DecimalMin(value = "0.1", message = "Weight should be at least 0.1!")
+    @Column(name="weight_kg", nullable = false)
+    private BigDecimal weightKg;
 
-    private BigDecimal price_per_kg;
+    @DecimalMin(value = "1", message = "Price per kg should be at least 1!")
+    @Column(name="price_per_kg", nullable = false)
+    private BigDecimal pricePerKg;
 
     @OneToMany(mappedBy = "aPackage")
     private Set<CargoType> cargoTypes;
@@ -22,9 +28,9 @@ public class Package{
     public Package() {
     }
 
-    public Package(BigDecimal weight_kg, BigDecimal price_per_kg) {
-        this.weight_kg = weight_kg;
-        this.price_per_kg = price_per_kg;
+    public Package(BigDecimal weightKg, BigDecimal pricePerKg) {
+        this.weightKg = weightKg;
+        this.pricePerKg = pricePerKg;
     }
 
     public long getId() {
@@ -35,20 +41,20 @@ public class Package{
         this.id = id;
     }
 
-    public BigDecimal getWeight_kg() {
-        return weight_kg;
+    public BigDecimal getWeightKg() {
+        return weightKg;
     }
 
-    public void setWeight_kg(BigDecimal weight_kg) {
-        this.weight_kg = weight_kg;
+    public void setWeightKg(BigDecimal weight_kg) {
+        this.weightKg = weight_kg;
     }
 
-    public BigDecimal getPrice_per_kg() {
-        return price_per_kg;
+    public BigDecimal getPricePerKg() {
+        return pricePerKg;
     }
 
-    public void setPrice_per_kg(BigDecimal price_per_kg) {
-        this.price_per_kg = price_per_kg;
+    public void setPricePerKg(BigDecimal price_per_kg) {
+        this.pricePerKg = price_per_kg;
     }
 
     public Set<CargoType> getCargoTypes() {
@@ -63,7 +69,7 @@ public class Package{
     public String toString() {
         return "Package{" +
                 "id=" + id +
-                ", weight_kg=" + weight_kg +
+                ", weight_kg=" + weightKg +
                 '}';
     }
 }

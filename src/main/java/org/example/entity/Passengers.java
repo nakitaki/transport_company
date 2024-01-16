@@ -1,6 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -8,12 +10,18 @@ import java.util.Set;
 @Entity
 @Table(name = "passengers")
 public class Passengers {
+
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Positive
+    @Column(name="sount")
     private int count;
 
+    @DecimalMin(value = "1", message = "Price per kg should be at least 1!")
+    @Column(name="price_per_person", nullable = false)
     private BigDecimal pricePerPerson;
 
     @OneToMany(mappedBy = "passengers")
