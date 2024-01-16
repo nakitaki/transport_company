@@ -21,7 +21,7 @@ public class Main {
         CategoryDao.saveOrUpdateCategory(category1);
         CategoryDao.saveOrUpdateCategory(category2);
         VehicleType vehicleType = new VehicleType("car");
-        Vehicle vehicle1 = new Vehicle("Audi a5", "CA 1558 AX", 4, BigDecimal.valueOf(30), company1, vehicleType);
+        Vehicle vehicle1 = new Vehicle("Audi a5", "CA1558AX", 4, BigDecimal.valueOf(30), company1, vehicleType);
         Driver driver1 = new Driver("Krischo", BigDecimal.valueOf(3000), company1);
         Driver driver2 = new Driver("Ivcho", BigDecimal.valueOf(2000),company1);
         driver1.setId(1);
@@ -70,6 +70,8 @@ public class Main {
         TransportDao.getTransportsDTO().forEach(System.out::println);
         System.out.println("here2");
         TransportDao.orderByDestination().forEach(System.out::println);
+
+
 
 //
 //        CompanyDao.getCompaniesDTO().forEach(System.out::println);

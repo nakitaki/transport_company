@@ -10,10 +10,12 @@ import java.util.Set;
 public class CargoType {
 
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private boolean isPaid;
+    @Column(name="is_paid", nullable = false)
+    private boolean isPaid = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Package aPackage;

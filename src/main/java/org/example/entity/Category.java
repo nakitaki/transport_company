@@ -1,6 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Set;
 
@@ -9,10 +11,14 @@ import java.util.Set;
 public class Category {
 
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String license;
+    @NotBlank(message = "Driver name cannot be blank!")
+    @Pattern(regexp = "^[A-Z].*", message = "License should start with a capital letter!")
+    @Column(name="category", nullable = false, unique = true)
+    private String category;
 
     @OneToMany(mappedBy = "category")
     private Set<Transport> transports;
@@ -23,8 +29,8 @@ public class Category {
     public Category() {
     }
 
-    public Category(String license) {
-        this.license = license;
+    public Category(String category) {
+        this.category = category;
     }
 
     public long getId() {
@@ -35,12 +41,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getLicense() {
-        return license;
+    public String getCategory() {
+        return category;
     }
 
-    public void setLicense(String license) {
-        this.license = license;
+    public void setCategory(String license) {
+        this.category = license;
     }
 
     public Set<Transport> getTransports() {
@@ -63,7 +69,7 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", license='" + license + '\'' +
+                ", license='" + category + '\'' +
                 '}';
     }
 }

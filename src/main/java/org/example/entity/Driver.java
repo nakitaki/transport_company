@@ -1,6 +1,10 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -10,11 +14,17 @@ import java.util.Set;
 public class Driver {
 
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Driver name cannot be blank!")
+    @Pattern(regexp = "^[A-Z].*", message = "Company should start with a capital letter!")
+    @Column(name="name", nullable = false)
     private String name;
 
+    @Column(name = "salary")
+    @DecimalMin(value = "1000.00", message = "Salary should be at least 1000.00")
     private BigDecimal salary;
 
     @ManyToOne(fetch = FetchType.LAZY)

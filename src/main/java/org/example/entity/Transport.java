@@ -1,6 +1,9 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -10,15 +13,22 @@ import java.util.Set;
 public class Transport {
 
     @Id
+    @Column(name="id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Starting point name cannot be blank!")
+    @Column(name="starting_point", nullable = false)
     private String startingPoint;
 
+    @NotBlank(message = "Destination name cannot be blank!")
+    @Column(name="destination", nullable = false)
     private String destination;
 
+    @Column(name="departure_date", nullable = false)
     private LocalDate departureDate;
 
+    @Column(name="arrival_date", nullable = false)
     private LocalDate arrivalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

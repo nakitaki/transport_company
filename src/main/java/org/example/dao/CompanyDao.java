@@ -97,36 +97,36 @@ public class CompanyDao {
         }
     }
 
-    public static List<Company> companiesFindByInitialCapitalBetween(BigDecimal top, BigDecimal bottom){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Company> cr = cb.createQuery(Company.class);
-            Root<Company> root = cr.from(Company.class);
+//    public static List<Company> companiesFindByInitialCapitalBetween(BigDecimal top, BigDecimal bottom){
+//        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+//            CriteriaBuilder cb = session.getCriteriaBuilder();
+//            CriteriaQuery<Company> cr = cb.createQuery(Company.class);
+//            Root<Company> root = cr.from(Company.class);
+//
+//            cr.select(root).where(cb.between(root.get("initialCapital"), top, bottom));
+//
+//            Query<Company> query = session.createQuery(cr);
+//            List<Company> companies = query.getResultList();
+//            return companies;
+//        }
+//    }
 
-            cr.select(root).where(cb.between(root.get("initialCapital"), top, bottom));
-
-            Query<Company> query = session.createQuery(cr);
-            List<Company> companies = query.getResultList();
-            return companies;
-        }
-    }
-
-    public static List<Company> findByWithNameStartingWithInitialCapitalGreaterThan(String name, BigDecimal capital){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Company> query = builder.createQuery(Company.class);
-            Root<Company> root = query.from(Company.class);
-
-            Predicate greaterThanInitialCapital = builder.greaterThan(root.get("initialCapital"), capital);
-            Predicate nameStartingWith = builder.like(root.get("name"), name + "%");
-
-            query.select(root).where(builder.and(greaterThanInitialCapital,nameStartingWith));
-
-            Query<Company> q = session.createQuery(query);
-            List<Company> companies = q.getResultList();
-            return companies;
-        }
-    }
+//    public static List<Company> findByWithNameStartingWithInitialCapitalGreaterThan(String name, BigDecimal capital){
+//        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+//            CriteriaBuilder builder = session.getCriteriaBuilder();
+//            CriteriaQuery<Company> query = builder.createQuery(Company.class);
+//            Root<Company> root = query.from(Company.class);
+//
+//            Predicate greaterThanInitialCapital = builder.greaterThan(root.get("initialCapital"), capital);
+//            Predicate nameStartingWith = builder.like(root.get("name"), name + "%");
+//
+//            query.select(root).where(builder.and(greaterThanInitialCapital,nameStartingWith));
+//
+//            Query<Company> q = session.createQuery(query);
+//            List<Company> companies = q.getResultList();
+//            return companies;
+//        }
+//    }
 
     public static List<Company> findByWithNameStartingWith(String name){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
@@ -145,19 +145,19 @@ public class CompanyDao {
     }
 
 
-    public static BigDecimal sumInitialCapital(){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
-            Root<Company> root = query.from(Company.class);
-
-            query.select(builder.sum(root.get("initialCapital")));
-
-            Query<BigDecimal> q = session.createQuery(query);
-            BigDecimal result = q.getSingleResult();
-            return result;
-        }
-    }
+//    public static BigDecimal sumInitialCapital(){
+//        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+//            CriteriaBuilder builder = session.getCriteriaBuilder();
+//            CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
+//            Root<Company> root = query.from(Company.class);
+//
+//            query.select(builder.sum(root.get("initialCapital")));
+//
+//            Query<BigDecimal> q = session.createQuery(query);
+//            BigDecimal result = q.getSingleResult();
+//            return result;
+//        }
+//    }
 
 
 
@@ -176,7 +176,7 @@ public class CompanyDao {
 
             company = session.createQuery(query).getSingleResult();
         }
-        return company.getEmployees();
+        return company.getDrivers();
     }
 
     public static List<DriverDto> getCompanyDriversDTO(long companyId) {
@@ -270,6 +270,24 @@ public class CompanyDao {
                 result = result.add(TransportDao.costFromTransport(t.getId()));
             }
             return result;
+        }
+    }
+
+    public static BigDecimal sumIncomeByIdOvercharge(long id){
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
+            Root<Company> root = query.from(Company.class);
+
+            List<Transport> transports = new ArrayList<>();
+            transports = CompanyDao.getFinishedTransports(id);
+            BigDecimal overcharge = CompanyDao.getCompanyById(id).getOvercharge();
+
+            BigDecimal result = BigDecimal.ZERO;
+            for (Transport t: transports) {
+                result = result.add(TransportDao.costFromTransport(t.getId()));
+            }
+            return result.multiply(overcharge);
         }
     }
 
