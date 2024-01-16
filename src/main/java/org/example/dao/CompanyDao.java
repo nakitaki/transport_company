@@ -3,17 +3,18 @@ package org.example.dao;
 import jakarta.persistence.criteria.*;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.CompanyDto;
+import org.example.dto.DriverCategoryDto;
 import org.example.dto.DriverDto;
 import org.example.dto.TransportDto;
-import org.example.entity.Company;
-import org.example.entity.Driver;
+import org.example.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CompanyDao {
 
@@ -127,6 +128,23 @@ public class CompanyDao {
         }
     }
 
+    public static List<Company> findByWithNameStartingWith(String name){
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Company> query = builder.createQuery(Company.class);
+            Root<Company> root = query.from(Company.class);
+
+            Predicate nameStartingWith = builder.like(root.get("name"), name + "%");
+
+            query.select(root).where(nameStartingWith);
+
+            Query<Company> q = session.createQuery(query);
+            List<Company> companies = q.getResultList();
+            return companies;
+        }
+    }
+
+
     public static BigDecimal sumInitialCapital(){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -141,7 +159,9 @@ public class CompanyDao {
         }
     }
 
-    //EMPLOYEES
+
+
+    //DRIVERS
     public static Set<Driver> getCompanyDrivers(long companyId) {
         Company company;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
@@ -159,7 +179,7 @@ public class CompanyDao {
         return company.getEmployees();
     }
 
-    public static List<DriverDto> getCompanyDriversDTO(long company_id) {
+    public static List<DriverDto> getCompanyDriversDTO(long companyId) {
         List<DriverDto> employees;
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
@@ -168,18 +188,190 @@ public class CompanyDao {
                                     " join e.company c" +
                                     " where c.id = :id",
                             DriverDto.class)
-                    .setParameter("id", company_id)
+                    .setParameter("id", companyId)
                     .getResultList();
             transaction.commit();
         }
         return employees;
     }
 
+    public static Set<Transport> getCompanyTransports(long companyId) {
+        Company company;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Company> query = builder.createQuery(Company.class);
+            Root<Company> root = query.from(Company.class);
+
+            root.fetch("transports", JoinType.INNER); // Eagerly fetch employees
+
+            query.select(root);
+            query.where(builder.equal(root.get("id"), companyId));
+
+            company = session.createQuery(query).getSingleResult();
+        }
+        return company.getTransports();
+    }
+
+
+
+//    public static List<Transport> getFinishedTransports1(long companyId) {
+//        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+//            Transaction transaction = session.beginTransaction();
+//            List<Transport> transports = new ArrayList<>();
+//
+//            String hql = "from Transport t where t.company.id = :id and t.arrivalDate < :now";
+//            Query query = session.createQuery(hql);
+//            query.setParameter("id", companyId);
+//            query.setParameter("now", LocalDate.now());
+//            transports = query.getResultList();
+//
+//            transaction.commit();
+//
+//            return transports;
+//        }
+//    }
+
+    public static List<Transport> getFinishedTransports(long companyId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            List<Transport> transports;
+
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Transport> criteriaQuery = builder.createQuery(Transport.class);
+            Root<Transport> root = criteriaQuery.from(Transport.class);
+
+            criteriaQuery.select(root)
+                    .where(
+                            builder.equal(root.get("company").get("id"), companyId),
+                            builder.lessThan(root.get("arrivalDate"), LocalDate.now())
+                    );
+
+            Query<Transport> query = session.createQuery(criteriaQuery);
+            transports = query.getResultList();
+
+            transaction.commit();
+
+            return transports;
+        }
+    }
+
+
+    public static BigDecimal sumIncomeById(long id){
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
+            Root<Company> root = query.from(Company.class);
+
+            List<Transport> transports = new ArrayList<>();
+            transports = CompanyDao.getFinishedTransports(id);
+
+            BigDecimal result = BigDecimal.ZERO;
+            for (Transport t: transports) {
+                result = result.add(TransportDao.costFromTransport(t.getId()));
+            }
+            return result;
+        }
+    }
+
+    public static List<Company> orderByIncomeAsc() {
+        List<Company> companies;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            String hql = "FROM Company c";
+            companies = session.createQuery(hql, Company.class).getResultList();
+
+            // Sort the companies based on sumIncome
+            companies.sort(Comparator.comparing(company -> sumIncomeById(company.getId())));
+            transaction.commit();
+        }
+        return companies;
+    }
 
 
 
 
 
+//    public static List<Company> orderByName1() {
+//        List<Company> companies;
+//        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+//            Transaction transaction = session.beginTransaction();
+//            companies = session.createQuery("Select c From Company c" +
+//                    " order by c.name", Company.class).getResultList();
+//            transaction.commit();
+//        }
+//        return companies;
+//    }
+
+    public static List<Company> orderByNameAsc() {
+        List<Company> companies;
+
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Company> criteriaQuery = builder.createQuery(Company.class);
+            Root<Company> root = criteriaQuery.from(Company.class);
+
+            criteriaQuery.select(root)
+                    .orderBy(builder.asc(root.get("name")));
+
+            Query<Company> query = session.createQuery(criteriaQuery);
+            companies = query.getResultList();
+            transaction.commit();
+        }
+
+        return companies;
+    }
+
+    public static List<Company> orderByNameDesc() {
+        List<Company> companies;
+
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Company> criteriaQuery = builder.createQuery(Company.class);
+            Root<Company> root = criteriaQuery.from(Company.class);
+
+            criteriaQuery.select(root)
+                    .orderBy(builder.desc(root.get("name")));
+
+            Query<Company> query = session.createQuery(criteriaQuery);
+            companies = query.getResultList();
+            transaction.commit();
+        }
+
+        return companies;
+    }
+
+    public static Map<Driver, List<Category>> companyDriversAndCategories(long companyId) {
+        Map<Driver, List<Category>> result = new HashMap<>();
+
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
+            Root<Driver> root = criteriaQuery.from(Driver.class);
+            Join<Driver, Category> categoryJoin = root.join("categories");
+            Join<Driver, Company> companyJoin = root.join("company");
+
+            criteriaQuery.multiselect(
+                    root.alias("driver"),
+                    categoryJoin.alias("category")
+            ).where(
+                    builder.equal(companyJoin.get("id"), companyId)
+            );
+
+            Query<Object[]> query = session.createQuery(criteriaQuery);
+            List<Object[]> resultList = query.getResultList();
+
+            for (Object[] row : resultList) {
+                Driver driver = (Driver) row[0];
+                Category category = (Category) row[1];
+
+                result.computeIfAbsent(driver, k -> new ArrayList<>()).add(category);
+            }
+        }
+        return result;
+    }
 
 
 

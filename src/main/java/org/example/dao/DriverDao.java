@@ -1,17 +1,16 @@
 package org.example.dao;
 
+import jakarta.persistence.criteria.*;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.DriverDto;
 import org.example.dto.DriverDto;
-import org.example.entity.Category;
-import org.example.entity.Driver;
+import org.example.entity.*;
 import org.example.exceptions.DriverNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DriverDao {
     public static void createDriver(Driver driver){
@@ -103,13 +102,89 @@ public class DriverDao {
 
             }
             driver.getCategories().add(category);
-            // if the qualification is not in the database => add it; same for the driver
+
             CategoryDao.saveOrUpdateCategory(category);
             DriverDao.saveOrUpdateDriver(driver);
 
             transaction.commit();
         }
     }
+
+    public static List<Driver> orderBySalaryAsc() {
+        List<Driver> drivers;
+
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Driver> criteriaQuery = builder.createQuery(Driver.class);
+            Root<Driver> root = criteriaQuery.from(Driver.class);
+
+            criteriaQuery.select(root)
+                    .orderBy(builder.asc(root.get("salary")));
+
+            Query<Driver> query = session.createQuery(criteriaQuery);
+            drivers = query.getResultList();
+            transaction.commit();
+        }
+
+        return drivers;
+    }
+
+    public static List<Driver> orderBySalaryDesc() {
+        List<Driver> drivers;
+
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Driver> criteriaQuery = builder.createQuery(Driver.class);
+            Root<Driver> root = criteriaQuery.from(Driver.class);
+
+            criteriaQuery.select(root)
+                    .orderBy(builder.desc(root.get("salary")));
+
+            Query<Driver> query = session.createQuery(criteriaQuery);
+            drivers = query.getResultList();
+            transaction.commit();
+        }
+
+        return drivers;
+    }
+
+
+    public static List<Category> DriverCategories(long driverID) {
+        List<Category> categories;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Category> cr = cb.createQuery(Category.class);
+            Root<Category> root = cr.from(Category.class);
+            Join<Category, Driver> join = root.join("drivers");
+
+            cr.select(root).where(cb.equal(join.get("id"), driverID));
+
+            Query<Category> query = session.createQuery(cr);
+            categories = query.getResultList();
+        }
+        return categories;
+    }
+
+    public static int countDriverCategories(long driverID) {
+        return DriverDao.DriverCategories(driverID).size();
+    }
+
+    public static List<Driver> orderByCategoriesCount() {
+        List<Driver> drivers;
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            drivers = session.createQuery("FROM Driver d", Driver.class).getResultList();
+
+            drivers.sort(Comparator.comparing(driver -> countDriverCategories(driver.getId())));
+            transaction.commit();
+        }
+        return drivers;
+    }
+
+
 
 
 

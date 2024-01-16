@@ -5,17 +5,19 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import org.example.configuration.SessionFactoryUtil;
+import org.example.dto.CompanyDto;
 import org.example.dto.TransportDto;
 import org.example.entity.CargoType;
+import org.example.entity.Company;
+import org.example.entity.Driver;
 import org.example.entity.Transport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 public class TransportDao {
     public static void createTransport(Transport transport){
@@ -104,6 +106,7 @@ public class TransportDao {
         return transportDtos;
     }
 
+
     public static void addCargoToTransport(CargoType cargo, Transport transport) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -149,6 +152,24 @@ public class TransportDao {
 
         return result;
     }
+
+    public static List<TransportDto> orderByDestination() {
+        List<TransportDto> transportDtos;
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            transportDtos = session
+                    .createQuery("select new org.example.dto.TransportDto(i.id, i.startingPoint, i.destination," +
+                            "i.departureDate, i.arrivalDate, i.vehicle, i.driver) " +
+                            "from Transport i order by i.destination", TransportDto.class)
+                    .getResultList();
+            transaction.commit();
+        }
+        return transportDtos;
+    }
+
+
+
+
 
 
 
